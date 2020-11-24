@@ -28,29 +28,37 @@ public class MainActivity extends AppCompatActivity {
     private TextView text;
     private CompositeDisposable disposables = new CompositeDisposable();
 
-    //disposables
+    //from array operator
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-       //timer
-        Observable<Long> timeObservable = Observable
-                .timer(3, TimeUnit.SECONDS)
+
+        Task[] list = new Task[5];
+        list[0] = (new Task("Take out the trash", true, 3));
+        list[1] = (new Task("Walk the dog", false, 2));
+        list[2] = (new Task("Make my bed", true, 1));
+        list[3] = (new Task("Unload the dishwasher", false, 0));
+        list[4] = (new Task("Make dinner", true, 5));
+
+        Observable<Task> taskObservable = Observable
+                .fromArray(list)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
 
-        timeObservable.subscribe(new Observer<Long>() {
+        taskObservable.subscribe(new Observer<Task>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
             }
 
             @Override
-            public void onNext(@NonNull Long aLong) {
-                Log.d(TAG, "onNext: " +aLong);
+            public void onNext(@NonNull Task task) {
+
+                Log.d(TAG, "onNext:  from array : " +task.getDescription());
             }
 
             @Override
@@ -63,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
 
