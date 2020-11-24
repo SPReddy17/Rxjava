@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -35,22 +36,30 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        //repeat operator...
-        Observable<Integer> observable = Observable
-                .range(0,3)
+      //emit an observable every time interval
+        Observable<Long> intervalObservable = Observable
+                .interval(1, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
-                .repeat(3)
+                .takeWhile(new Predicate<Long>() {
+                    @Override
+                    public boolean test(Long aLong) throws Throwable {
+                        Log.d(TAG, "test: "+aLong+"," +Thread.currentThread().getName());
+                        return aLong <=5;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread());
 
-        observable.subscribe(new Observer<Integer>() {
+
+        intervalObservable.subscribe(new Observer<Long>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
             }
 
             @Override
-            public void onNext(@NonNull Integer integer) {
-                Log.d(TAG, "onNext: " + integer);
+            public void onNext(@NonNull Long aLong) {
+
+                Log.d(TAG, "onNext: " +aLong);
             }
 
             @Override
@@ -63,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 
