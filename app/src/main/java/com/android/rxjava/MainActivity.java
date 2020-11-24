@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
+        //interval
       //emit an observable every time interval
         Observable<Long> intervalObservable = Observable
                 .interval(1, TimeUnit.MILLISECONDS)
