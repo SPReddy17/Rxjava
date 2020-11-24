@@ -36,11 +36,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean test(Task task) throws Exception {
                         Log.d(TAG, "test: called" + Thread.currentThread().getName());
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+
                         return task.isComplete();
                     }
                 })
