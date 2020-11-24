@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView text;
     private CompositeDisposable disposables = new CompositeDisposable();
 
+    //disposables
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
