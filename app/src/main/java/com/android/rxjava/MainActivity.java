@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
@@ -83,15 +85,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         // create operator
-        final Task task = new Task("Walk the dog", false,3);
+      //    final Task task = new Task("Walk the dog", false,3);
+        final   List<Task> tasks = DataSource.createTasksList();
+
         Observable<Task> taskObservable = Observable
                 .create(new ObservableOnSubscribe<Task>() {
                     @Override
                     public void subscribe(@NonNull ObservableEmitter<Task> emitter) throws Throwable {
-                        if (!emitter.isDisposed()) {
-                            emitter.onNext(task);
-                            emitter.onComplete();
-                        }
+
+                      for (Task task : DataSource.createTasksList()){
+                          if (!emitter.isDisposed()) {
+                              emitter.onNext(task);
+
+                          }
+                      }
+                      if(!emitter.isDisposed()){
+                          emitter.onComplete();
+                      }
+
+
                     }
                 })
                 .subscribeOn(Schedulers.io())
