@@ -1,5 +1,6 @@
 package com.android.rxjava;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -34,34 +35,22 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        //range...
-        Observable<Task> observable = Observable
-                .range(0,9)
+        //repeat operator...
+        Observable<Integer> observable = Observable
+                .range(0,3)
                 .subscribeOn(Schedulers.io())
-                .map(new Function<Integer, Task>() {
-                    @Override
-                    public Task apply(Integer integer) throws Throwable {
-                        Log.d(TAG, "apply: " + Thread.currentThread().getName());
-                        return new Task("this is a task with prioroty: "+ String.valueOf(integer),false,integer);
-                    }
-                })
-                .takeWhile(new Predicate<Task>() {
-                    @Override
-                    public boolean test(Task task) throws Throwable {
-                        return task.getPriority() < 9 ;
-                    }
-                })
+                .repeat(3)
                 .observeOn(AndroidSchedulers.mainThread());
 
-        observable.subscribe(new Observer<Task>() {
+        observable.subscribe(new Observer<Integer>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
             }
 
             @Override
-            public void onNext(@NonNull Task task) {
-                Log.d(TAG, "onNext: " +task.getPriority()+ " ..." + task.getDescription() );
+            public void onNext(@NonNull Integer integer) {
+                Log.d(TAG, "onNext: " + integer);
             }
 
             @Override
