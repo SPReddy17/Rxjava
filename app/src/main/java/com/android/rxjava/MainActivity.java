@@ -35,22 +35,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        //interval
-      //emit an observable every time interval
-        Observable<Long> intervalObservable = Observable
-                .interval(1, TimeUnit.MILLISECONDS)
+       //timer
+        Observable<Long> timeObservable = Observable
+                .timer(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
-                .takeWhile(new Predicate<Long>() {
-                    @Override
-                    public boolean test(Long aLong) throws Throwable {
-                        Log.d(TAG, "test: "+aLong+"," +Thread.currentThread().getName());
-                        return aLong <=5;
-                    }
-                })
                 .observeOn(AndroidSchedulers.mainThread());
 
 
-        intervalObservable.subscribe(new Observer<Long>() {
+        timeObservable.subscribe(new Observer<Long>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
@@ -58,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(@NonNull Long aLong) {
-
                 Log.d(TAG, "onNext: " +aLong);
             }
 
